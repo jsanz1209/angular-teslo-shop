@@ -1,0 +1,25 @@
+
+<div class="w-[calc(100%_-16rem)]">
+
+  @if (productResource.isLoading()) {
+  <div class="flex justify-center items-center h-96">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+  }
+
+  @if (productId !== 'new' && productResource.error()) {
+  <div class="alert alert-error shadow-lg">
+    <div>
+      <span>Error loading product details.</span>
+    </div>
+  </div>
+
+  }
+
+  @if (productResource.hasValue()) {
+   <app-product-details [product]="productResource.value()" />
+  } @else if (productId !== 'new') {
+    <p class="text-center text-gray-500">No product details available</p>
+  }
+</div>
+

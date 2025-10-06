@@ -1,0 +1,60 @@
+<div class="w-[calc(100%_-16rem)]">
+
+  <h1>Listado de productos</h1>
+  <h3 class="text-lg">
+    Total de productos
+    <span class="text-accent text-2xl font-bold">
+      @if (productsResource.hasValue()) {
+      {{ productsResource.value().count }}
+      } @else { - }
+    </span>
+  </h3>
+
+  <div class="divier"></div>
+
+  @if (productsResource.isLoading()) {
+
+  <div class="flex justify-center items-center h-96">
+    <span class="loading loading-spinner loading-lg"></span>
+  </div>
+  }
+
+  @if (productsResource.error()) {
+
+  <div class="alert alert-error shadow-lg">
+    <div>
+      <span>Error loading product details.</span>
+    </div>
+  </div>
+
+  }
+
+  @if (productsResource.hasValue()) {
+    @if (productsResource.value().products.length > 0) {
+      <!-- Product Table -->
+      <app-product-table [products]="productsResource.value().products" />
+    } @else {
+      <p class="text-center text-gray-500">No hay productos disponibles</p>
+    }
+
+    <div class="divider"></div>
+
+    <section class="flex justify-center items-center gap-x-5">
+
+      <app-pagination [currentPage]="currengPage()" [totalPages]="productsResource.value().pages" />
+
+      <select class="select select-bordered mt-4 mb-10 max-w-[5rem]"
+              [(ngModel)]="limit"
+              (change)="onChangeSelector($event)">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </section>
+  }
+
+  <div class="flex justify-end">
+    <a class="btn btn-primary" [routerLink]="['/admin/product/new']">Crear producto</a>
+  </div>
+</div>

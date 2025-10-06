@@ -1,0 +1,150 @@
+@if (product() === null) {
+  <h1 class="text-2xl font-bold">New product</h1>
+} @else {
+  <h1 class="text-2xl font-bold">{{ product()?.title }}</h1>
+}
+<div class="divider"></div>
+
+<form class="grid grid-cols-1 sm:grid-cols-2 gap-4" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+  <!-- Datos generales -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-2xl font-bold h-12">Datos generales</h2>
+    <input type="text" placeholder="Título" class="input input-bordered w-full" [class.border-red-500]="isInvalidField('title')()" formControlName="title" />
+    @if (isInvalidField('title')()) {
+      <p class="text-error text-sm">
+        {{ getFieldError('title')() }}
+      </p>
+    }
+
+    <input type="text" placeholder="Slug" class="input input-bordered w-full" [class.border-red-500]="isInvalidField('slug')()" formControlName="slug" />
+    @if (isInvalidField('slug')()) {
+      <p class="text-error text-sm">
+        {{ getFieldError('slug')() }}
+      </p>
+    }
+
+    <textarea class="textarea textarea-bordered" [class.border-red-500]="isInvalidField('description')()" placeholder="Descripción" formControlName="description"
+      rows="6"></textarea>
+    @if (isInvalidField('description')()) {
+      <p class="text-error text-sm">
+        {{ getFieldError('description')() }}
+      </p>
+    }
+
+    <h2 class="text-lg font-bold">Datos de venta</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <input type="number" placeholder="Precio" class="input input-bordered w-full" [class.border-red-500]="isInvalidField('price')()" formControlName="price" />
+      @if (isInvalidField('price')()) {
+        <p class="text-error text-sm">
+          {{ getFieldError('price')() }}
+        </p>
+      }
+
+      <input type="number" placeholder="Inventario" class="input input-bordered w-full" [class.border-red-500]="isInvalidField('stock')()" formControlName="stock" />
+      @if (isInvalidField('stock')()) {
+        <p class="text-error text-sm">
+          {{ getFieldError('stock')() }}
+        </p>
+      }
+    </div>
+
+    <!-- tags -->
+    <input type="text" placeholder="Tags" class="input input-bordered w-full" [class.border-red-500]="isInvalidField('tags')()" formControlName="tags" (change)="onChangeTags($event)" />
+
+    <!-- Botones para el género -->
+    <div class="grid grid-cols-4 gap-2">
+      <!-- <button class="btn btn-sm btn-outline">Masculino</button> -->
+      <button class="btn btn-sm btn-primary"
+              type="button"
+              [class]="productForm.value.gender === 'men' ? '' : 'btn-outline'"
+              (click)="onUpdateGender('men')">
+        Masculino
+      </button>
+      <button class="btn btn-sm btn-accent"
+              type="button"
+              [class]="productForm.value.gender === 'women' ? '' : 'btn-outline'"
+              (click)="onUpdateGender('women')">
+        Femenino
+      </button>
+      <button class="btn btn-sm btn-warning"
+              type="button"
+              [class]="productForm.value.gender === 'kid' ? '' : 'btn-outline'"
+              (click)="onUpdateGender('kid')">
+        Kid
+      </button>
+      <button class="btn btn-sm btn-secondary"
+              type="button"
+              [class]="productForm.value.gender === 'unisex' ? '' : 'btn-outline'"
+              (click)="onUpdateGender('unisex')">
+        Unisex
+      </button>
+    </div>
+    @if (isInvalidField('gender')()) {
+      <p class="text-error text-sm">
+        {{ getFieldError('gender')() }}
+      </p>
+    }
+
+    <!-- Sizes -->
+    <div class="grid grid-cols-6 gap-2">
+      @for (size of sizes; track size) {
+      <button type="button"
+              class="btn btn-sm"
+              [class]="productForm.value.sizes?.includes(size) ?  'bg-white text-black' : 'btn-outline'"
+              (click)="onUpdateSize(size)">{{ size }}
+      </button>
+      }
+    </div>
+    @if (isInvalidField('sizes')()) {
+      <p class="text-error text-sm">
+        {{ getFieldError('sizes')() }}
+      </p>
+    }
+  </div>
+
+  <!-- Imágenes -->
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-end h-12">
+      <button class="btn btn-secondary" type="submit" [disabled]="loading()">
+        @if (loading()) {
+          <span class="loading loading-spinner loading-sm"></span>
+        } @else {
+          Guardar
+        }
+      </button>
+
+      <button class="btn btn-error ml-2" type="button" (click)="onDeleteProduct()">
+          @if (loading()) {
+              <span class="loading loading-spinner loading-sm"></span>
+          } @else {
+
+            <span class="material-icons">Delete</span>
+          }
+      </button>
+
+    </div>
+
+    <app-product-carousel [images]="tempImages" />
+
+    <input type="file"
+           class="file-input file-input-accent w-full mt-4"
+           accept="image/*"
+           multiple
+           (change)="onImagesLoaded($event)"  />
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2">
+      @for (image of images(); track image) {
+      <div class="relative">
+        <img [src]="image" class="w-full h-32 object-cover rounded-md" />
+        <button class="btn btn-sm btn-error absolute bottom-1 right-1 opacity-70 hover:opacity-100"
+                type="button"
+                (click)="onDeleteImage(image)">
+          <span class="material-icons">Delete</span>
+        </button>
+      </div>
+      }
+    </div>
+
+  </div>
+</form>

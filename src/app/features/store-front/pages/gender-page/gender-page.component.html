@@ -1,0 +1,30 @@
+<h1 class="text-3xl font-bold font-monsterat">Todos los productos</h1>
+<h2 class="text-xl mb-5">Para {{gender() | titlecase}}</h2>
+
+@if (productsResource.isLoading()) {
+<div class="flex justify-center items-center h-96">
+  <span class="loading loading-spinner loading-lg"></span>
+</div>
+}
+
+@if (productsResource.error()) {
+<div class="alert alert-error shadow-lg">
+  <div>
+    <span>Error loading product details.</span>
+  </div>
+</div>
+}
+
+@if (productsResource.hasValue()) {
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mt-2">
+  @for (product of productsResource.value().products; track product.id) {
+    <app-product-card [product]="product" ></app-product-card>
+  } @empty {
+    <p class="text-center text-gray-500">No hay productos disponibles</p>
+  }
+</div>
+
+<app-pagination [currentPage]="currengPage()"
+                [totalPages]="productsResource.value().pages" />
+
+}

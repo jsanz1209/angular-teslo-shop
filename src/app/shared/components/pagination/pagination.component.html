@@ -1,0 +1,11 @@
+
+<div class="join flex justify-center mt-4 items-center mb-10">
+  @for(page of pagesArray(); track page) {
+    <button class="join-item btn"
+            [class.btn-primary]="currentPage() === page"
+            [routerLink]="['./']"
+            [queryParams]="{page }">{{page}}</button>
+  } @empty {
+    <span class="text-gray-500">No pages available</span>
+  }
+</div>

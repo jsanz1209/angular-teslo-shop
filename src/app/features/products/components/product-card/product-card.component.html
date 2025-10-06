@@ -1,0 +1,21 @@
+<div class="card bg-base-100 shadow-sm animate-fadeIn">
+  <figure class="h-48">
+    <img
+      [src]="imageURL()"
+      [alt]="product().title"
+      [title]="product().title"
+      loading="lazy"
+      class="object-cover w-full h-full"
+    />
+  </figure>
+
+  <div class="card-body">
+    <h2 class="card-title font-monsterat text-accent text-xl cursor-pointer"  [routerLink]="['/store/product', product().slug]">{{product().title}}</h2>
+    <p>
+      {{product().description}}
+    </p>
+    <div class="card-actions justify-end mt-3">
+      <a class="btn btn-primary" [routerLink]="['/store/product', product().slug]">More details</a>
+    </div>
+  </div>
+</div>

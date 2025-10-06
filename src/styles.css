@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: "Monsterat";
+  src: url("/fonts/Montserrat-Medium.ttf") format("truetype");
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    night;
+}
+
+@theme {
+  --font-monsterat: "Monsterat", sans-serif;
+  --animate-fadeIn: fadeIn 0.5s ease-in-out;
+}
